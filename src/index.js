@@ -1,20 +1,24 @@
+let footballersId = [3455, 8198, 28003, 26399, 25557, 342229, 27992, 54928, 39983, 5023, 68290, 35207, 164770, 37666, 353366];
+
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': 'f75a2075e4msh3cd9e936ee7534dp1c14f9jsn5aa4aea1b994',
+		'X-RapidAPI-Key': '0a9734bf35mshfdc39692fbca45cp149514jsnd68f1fc0e309',
 		'X-RapidAPI-Host': 'transfermarket.p.rapidapi.com'
 	}
 };
 
 const newFootballer = (id) => 
 {
-	fetch(`https://transfermarket.p.rapidapi.com/players/get-transfer-history?id=${id}&domain=com`, options)
+	fetch(`https://transfermarket.p.rapidapi.com/players/get-transfer-history?id=${footballersId[id%footballersId.length]}&domain=com`, options)
 	.then(response => response.json())
 	.then(response =>
 	{
 		console.log(response)
 		
 		dataTransfers = response["transferHistory"]
+		infoPlayer = response["share"]
+		transferPlayer = response["transferHistory"]
 		console.log(dataTransfers)
 		
 		let numClubs = dataTransfers.length;
@@ -33,30 +37,41 @@ const newFootballer = (id) =>
 
 document.getElementById('t').addEventListener('click', function() 
 {
+	namePlayer = infoPlayer['title'].split(' - ')[0].split(' ');
 	console.log("Function started");
+	let removeArrow = 0;
 	var paras = document.getElementsByClassName('club');
-
 	while(paras[0]) 
 	{
 		paras[0].parentNode.removeChild(paras[0]);
+		removeArrow++;
 	}
+
+	let className = "c"
+	for (let i = 1; i <= removeArrow; i++)
+	{
+		document.getElementById(className).remove();
+		className = className + "c"
+	}
+	
+
 
 	let id = Math.floor(Math.random() * 100000);
 	let numClubs = dataTransfers.length;
 	
-	let className = "c"
+	className = "c"
+
 	for (let i = numClubs - 1; i >= 0; i--)
 	{
 		let clubImage = dataTransfers[i]["newClubImage"]
 		let season = dataTransfers[i]["season"]
 		let clubName = dataTransfers[i]["newClubName"]
-
-		document.querySelector('body').innerHTML += `<div class="club"><img src="${clubImage}" class = "clubImg">\
-													<p class = "clubTxt">${season}</p>\
-													<p class = "clubTxt">${clubName}</p>\
-													</div>\
-													<canvas id="${className}" width="50" height="100"></canvas>`
 		
+		document.body.insertAdjacentHTML("beforeend", `<div class="club"><img src="${clubImage}" class = "clubImg">\
+										<p class = "clubTxt">${season}</p>\
+										<p class = "clubTxt">${clubName}</p>\
+										</div>\
+										<canvas id="${className}" width="50" height="100"></canvas>`);
 		className = className + "c"
 	}
 
@@ -102,47 +117,35 @@ document.getElementById('send').addEventListener('click', function()
 	let footballer = document.getElementsByTagName("input")[0];
 	let val = footballer.value;
 	console.log(val);
-	
+	//let namePlayer = infoPlayer['title'].split(' - ')[0].split(' ');
+	console.log(namePlayer);
+	if (namePlayer.includes(val))
+	{
+		console.log("Correct!")
+	}
 });
 
 // ================================================================================================
 
 let dataTransfers;
+let infoPlayer;
+let namePlayer;
+let transferPlayer;
 
 console.log("HEllo ")
 newFootballer(Math.floor(Math.random() * 100000))
 
-// const options = {
-// 	method: 'GET',
-// 	headers: {
-// 		'X-RapidAPI-Key': 'f75a2075e4msh3cd9e936ee7534dp1c14f9jsn5aa4aea1b994',
-// 		'X-RapidAPI-Host': 'transfermarket.p.rapidapi.com'
-// 	}
-// };
+var svg = document.getElementById("svg");
+var polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+svg.appendChild(polygon);
 
-// fetch('https://transfermarket.p.rapidapi.com/search?query=chelsea&domain=com', options)
-// 	.then(response => response.json())
-// 	.then(response => console.log(response))
-// 	.catch(err => console.error(err));
+var array = [ [ 0,0 ], 
+             [ 50,50 ],
+             [ 25,25 ], ];
 
-	// fetch(`https://transfermarket.p.rapidapi.com/players/get-transfer-history?id=74842&domain=com`, options)
-	// 	.then(response => response.json())
-	// 	.then(response =>
-	// 	{
-	// 		console.log(response)
-			
-	// 		dataTransfers = response["transferHistory"]
-	// 		console.log(dataTransfers)
-			
-	// 		let numClubs = dataTransfers.length;
-			
-	// 		console.log(dataTransfers[numClubs - 1]["oldClubName"])
-	// 		for (let i = numClubs - 1; i >= 0; i--)
-	// 		{
-	// 			let club = dataTransfers[i]["newClubName"]
-	// 			let season = dataTransfers[i]["season"]
-	// 			console.log(club, season)
-	// 		}
-	// 	} )
-	// 		.catch(err => console.error(err));
-		
+for (let value of array) {
+  var point = svg.createSVGPoint();
+  point.x = value[0];
+  point.y = value[1];
+  polygon.points.appendItem(point);
+}
