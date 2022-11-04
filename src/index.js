@@ -10,7 +10,8 @@ const options = {
 
 const newFootballer = (id) => 
 {
-	fetch(`https://transfermarket.p.rapidapi.com/players/get-transfer-history?id=${footballersId[id%footballersId.length]}&domain=com`, options)
+	let curId = footballersId[id%footballersId.length]
+	fetch(`https://transfermarket.p.rapidapi.com/players/get-transfer-history?id=${curId}&domain=com`, options)
 	.then(response => response.json())
 	.then(response =>
 	{
@@ -33,10 +34,29 @@ const newFootballer = (id) =>
 		
 	} )
 	.catch(err => console.error(err));
+
+	fetch(`https://transfermarket.p.rapidapi.com/players/get-header-info?id=${curId}&domain=com`, options)
+	.then(response => response.json())
+	.then(response =>{
+		imgPlayer = response["data"]["player"]["imageLarge"]
+	} )
+	.catch(err => console.error(err));
 }
 
 document.getElementById('t').addEventListener('click', function() 
 {
+	if (document.getElementById("answer") != null)
+	{
+		document.getElementById("answer").remove();	
+	}
+	
+	if (document.getElementById("wrongAnswer") != null)
+	{
+		document.getElementById("wrongAnswer").remove();	
+	}
+
+	curImg = imgPlayer;
+	namePlayerFull = infoPlayer['title'].split(' - ')[0]
 	namePlayer = infoPlayer['title'].split(' - ')[0].split(' ');
 	console.log("Function started");
 	let removeArrow = 0;
@@ -118,10 +138,28 @@ document.getElementById('send').addEventListener('click', function()
 	let val = footballer.value;
 	console.log(val);
 	//let namePlayer = infoPlayer['title'].split(' - ')[0].split(' ');
+	console.log(document.getElementById("answer"))
+	if (document.getElementById("answer") != null)
+	{
+		document.getElementById("answer").remove();	
+	}
+	
+	if (document.getElementById("wrongAnswer") != null)
+	{
+		document.getElementById("wrongAnswer").remove();	
+	}
+
+	//document.getElementById("answer").remove();
+	//document.getElementById("wrongAnswer").remove();
+
 	console.log(namePlayer);
 	if (namePlayer.includes(val))
 	{
-		console.log("Correct!")
+		document.body.insertAdjacentHTML("beforeend", `<div id="answer"><img src="${curImg}" class = "imgAnswer"><p class = "txtAnswer">You're right! This is ${namePlayerFull}</p></div>`);
+	}
+	else
+	{
+		document.body.insertAdjacentHTML("beforeend", `<div id="wrongAnswer"><img class = "imgWrongAnswer" src="https://s0.rbk.ru/v6_top_pics/media/img/0/03/754845793156030.jpg"><p class = "textWrongAnswer">Very bad! Try Else!</p></div>`);
 	}
 });
 
@@ -131,6 +169,9 @@ let dataTransfers;
 let infoPlayer;
 let namePlayer;
 let transferPlayer;
+let imgPlayer;
+let namePlayerFull;
+let curImg;
 
 console.log("HEllo ")
 newFootballer(Math.floor(Math.random() * 100000))

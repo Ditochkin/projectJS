@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lesson 4</title>
+    <title>What a player</title>
     <meta charset="UTF-8"/>
 
     <script src="src/index.js" type="module"></script>
 </head>
 
 <body>
+
+<div class="bigOffset"></div>
 
 
 <div class="text-field">
@@ -23,10 +25,14 @@
 
     <button id="send">Send footballer</button>
     <button id="t">New footballer</button>
+    
 </div>
-
+<div class="bigOffset"></div>
 
 <style>
+  .bigOffset{
+    height: 40px;
+  }
   .club{
     display:inline-block;
     padding : 10px;
@@ -45,6 +51,24 @@
   stroke: black;
 }
 
+#answer{
+  margin-left: 42%;
+}
+
+#wrongAnswer{
+  margin-left: 33.5%;
+}
+
+.txtAnswer{
+  margin-left: -4%;
+  font-size: 25px;
+}
+
+.textWrongAnswer{
+  font-size: 25px;
+  margin-left: 17.5%;
+}
+
 input[type="text"] {
   font-family: cursive; /* 1 */
   font-size: 21px; /* 1 */
@@ -58,11 +82,8 @@ input[type="text"] {
 
 /* установим отступ 1rem от нижнего края элемента */
 .text-field {
-  
-  margin-bottom: 1rem;
   margin: 0 auto;
-  margin-top: 200px;
-  width: 23.95%;
+  width: 23.8%;
 }
 
 .offset{
@@ -99,6 +120,14 @@ p {
 label {
     font-family : cursive;
     font-size: 28px;
+}
+
+.imgAnswer{
+  border-radius: 30px;
+}
+
+.imgWrongAnswer{
+  border-radius: 30px;
 }
 
 #send {
